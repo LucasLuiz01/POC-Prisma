@@ -11,6 +11,26 @@ export async function insertPlat (nome:string): Promise<void> {
     })
 }
 export async function getMovies (): Promise<QueryResult<QtdPorPlataforma>> {
-//const movies = await prisma.platform.findMany() .query(`SELECT p.name AS "Plataforma", COUNT(s.id) AS "Quantidade de filmes" FROM platform p LEFT JOIN "moviePlatform" m ON p.id = "idPlatform" LEFT JOIN movie s ON m."idMovie" = s.id GROUP BY p.id`);
-return []
+//const movies = await prisma.platform.findMany() .query(
+    //`SELECT p.name AS "Plataforma", COUNT(s.id) AS "Quantidade de filmes" 
+    //FROM platform p LEFT JOIN "moviePlatform" m ON p.id = "idPlatform" 
+    //LEFT JOIN movie s ON m."idMovie" = s.id GROUP BY p.id`);
+    const movie = await prisma.platform.findMany({
+        include:{
+            moviePlatform: {
+                select:{
+                    idMovie: true
+                },
+                include: {
+                    movie: {
+                        select: {
+                            id: true,
+                        }
+                    }
+                }
+            }
+        }
+    })
+
+return movie
 }

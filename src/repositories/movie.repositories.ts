@@ -59,7 +59,7 @@ export async function insertuserMovieStats (userDados:userMovieStatus): Promise<
 }
 export async function updateMovieStats (userDados:updateMovieStatus): Promise<string> {
     //const userStatusExistente: QueryResult<userMovieStatusGet> = await connection.query('SELECT * from "userMovieStatus" WHERE id = $1',[userDados.id])
-    const userStatusExistente: QueryResult<userMovieStatusGet> = prisma.userMovieStatus.findFirst({
+    const userStatusExistente = prisma.userMovieStatus.findFirst({
         where: {
             id: userDados.id
         }

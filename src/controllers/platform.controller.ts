@@ -27,7 +27,7 @@ export async function insertPlatform(req:Request, res:Response){
 export async function getByPlatform(req:Request, res:Response){
     try{
       const movies = await getMovies()
-        res.status(200).send(movies.rows);
+        res.status(200).send(movies);
     }catch(err){
         console.log(err);
        return res.status(400).send(err)
