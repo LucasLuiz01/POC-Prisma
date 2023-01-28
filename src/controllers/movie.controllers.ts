@@ -1,9 +1,9 @@
 import { moviePlatform, userMovieStatus, updateMovieStatus } from "../protocols/movie.protocols.js";
 import { Request, Response } from "express";
 import { movieSchema } from "../schemas/movie.schema.js";
-import { insertMov, insertuserMovieStats, updateMovieStats, deleteUserStatus } from "../repositories/movie.repositories.js";
 import { userMovieStatusSchema } from "../schemas/userMovieStatus.schema.js";
 import { updateMovieStatusSchema } from "../schemas/updateUser.Schema.js";
+import { insertMovServices, insertuserMovieStatsServices, updateMovieStatsServices,deleteUserStatusServices } from "../services/movie.services.js";
 
 export async function insertMovie(req:Request, res:Response){
     const dados =  req.body as moviePlatform
@@ -14,7 +14,7 @@ if( error){
     })
 }
 try {
-    const insert: string = await insertMov(dados);
+    const insert: string = await insertMovServices(dados);
     if(insert){
         return res.status(404).send(insert)
     }
@@ -34,7 +34,7 @@ export async function inserUserMovieStatus (req:Request, res: Response){
         })
     }
     try {
-       const inserido: string = await insertuserMovieStats(userDados)
+       const inserido: string = await insertuserMovieStatsServices(userDados)
        if(inserido){
         return res.status(409).send(inserido)
        }
@@ -54,7 +54,7 @@ if(error){
     })
 }
 try {
-    const inserido: string = await updateMovieStats(userDados)
+    const inserido: string = await updateMovieStatsServices(userDados)
 if(inserido){
  return res.status(409).send(inserido)
 }
@@ -67,7 +67,7 @@ if(inserido){
 export async function deleteUserMovieStatus (req:Request, res:Response){
     const id: number = parseInt(req.params.id)
 try {
-    const inserido: string = await deleteUserStatus(id)
+    const inserido: string = await deleteUserStatusServices(id)
 if(inserido){
  return res.status(409).send(inserido)
 }

@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 import { platformSchema } from "../schemas/platform.schema.js";
-import { insertPlat, getMovies } from "../repositories/platform.repositories.js";
+import { insertPlatServices, getMoviesServices } from "../services/platform.services.js";
 
 export async function insertPlatform(req:Request, res:Response){
     const {name} = req.body;
@@ -15,7 +15,7 @@ export async function insertPlatform(req:Request, res:Response){
         return res.sendStatus(400);
     }
     try{
-        await insertPlat(nome)
+        await insertPlatServices(nome)
         res.status(200).send("INSIRIDO COM SUCESSO");
     }catch(err){
         console.log(err);
@@ -26,7 +26,7 @@ export async function insertPlatform(req:Request, res:Response){
 
 export async function getByPlatform(req:Request, res:Response){
     try{
-      const movies = await getMovies()
+      const movies = await getMoviesServices()
         res.status(200).send(movies);
     }catch(err){
         console.log(err);

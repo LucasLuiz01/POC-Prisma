@@ -1,5 +1,4 @@
 import prisma from "../database/db.js";
-import { QueryResult } from "pg";
 import { QtdPorPlataforma } from "../protocols/movie.protocols.js";
 
 export async function insertPlat (nome:string): Promise<void> {
@@ -10,27 +9,28 @@ export async function insertPlat (nome:string): Promise<void> {
         }
     })
 }
-export async function getMovies (): Promise<QueryResult<QtdPorPlataforma>> {
+export async function getMovies (): Promise<QtdPorPlataforma[]> {
 //const movies = await prisma.platform.findMany() .query(
     //`SELECT p.name AS "Plataforma", COUNT(s.id) AS "Quantidade de filmes" 
     //FROM platform p LEFT JOIN "moviePlatform" m ON p.id = "idPlatform" 
     //LEFT JOIN movie s ON m."idMovie" = s.id GROUP BY p.id`);
     const movie = await prisma.platform.findMany({
-        include:{
-            moviePlatform: {
+        select: {
+            name: true,
+            _count:{
                 select:{
-                    idMovie: true
-                },
-                include: {
-                    movie: {
-                        select: {
-                            id: true,
-                        }
-                    }
+                    moviePlatform: true
                 }
             }
         }
     })
-
-return movie
+const array = [];
+movie.map((info) => {
+   const object = {
+        platforma: `${info.name}`,
+        Quantidade: info._count.moviePlatform
+    }
+    array.push(object)
+})
+return array
 }

@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { insertGenre } from "../repositories/genre.repositories.js";
+import { insertGenreService } from "../services/genre.services.js";
 import { genreSchema } from "../schemas/genre.schema.js";
 
 export async function insertGenres(req:Request, res:Response){
@@ -15,7 +15,7 @@ export async function insertGenres(req:Request, res:Response){
         return res.sendStatus(400);
     }
     try{
-        await insertGenre(nome)
+        await insertGenreService(nome)
         res.status(200).send("INSIRIDO COM SUCESSO");
     }catch(err){
         console.log(err);
