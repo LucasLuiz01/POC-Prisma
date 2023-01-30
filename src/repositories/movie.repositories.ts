@@ -1,6 +1,34 @@
 import { movie } from "@prisma/client";
 import prisma from "../database/db.js";
+import { platform } from "@prisma/client";
 import {  moviePlatform, userMovieStatus, updateMovieStatus, platformProtocols, userMovieStatusGet, MovieGet } from "../protocols/movie.protocols.js";
+
+export async function userMovieExist (id: number){
+     const userStatusExistente = await prisma.userMovieStatus.findFirst({
+         where: {
+             id
+         }
+     })
+    return userStatusExistente
+}
+export async function platformVerify(dados:moviePlatform){
+    const platformExist: platform = await prisma.platform.findFirst({
+        where: {
+            id: dados.idPlatform
+        }
+    })
+    return platformExist
+}
+export async function userExist (userDados:userMovieStatus){
+    const userStatusExistente= await prisma.userMovieStatus.findFirst({
+        where:{
+            username: userDados.username,
+            idMovie: userDados.idMovie
+        }
+       })
+    return userStatusExistente
+}
+
 export async function insertMov (dados:moviePlatform): Promise<void> {
     //await connection.query('INSERT INTO movie (name, "idGenre") VALUES ($1, $2)', [dados.name, dados.idGenre]); 
     await prisma.movie.create({

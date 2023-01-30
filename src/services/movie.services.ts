@@ -1,14 +1,7 @@
-import { platform } from "@prisma/client";
-import prisma from "../database/db.js";
-import { insertMov, insertuserMovieStats, updateMovieStats, deleteUserStatus } from "../repositories/movie.repositories.js";
+import { insertMov, insertuserMovieStats, updateMovieStats, deleteUserStatus, platformVerify, userExist, userMovieExist } from "../repositories/movie.repositories.js";
 import {  moviePlatform, userMovieStatus, updateMovieStatus } from "../protocols/movie.protocols.js";
 export async function insertMovServices (dados:moviePlatform): Promise<string> {
-    //const platformExist: QueryResult<platformProtocols> = await connection.query('SELECT * FRO
-    const platformExist: platform = await prisma.platform.findFirst({
-        where: {
-            id: dados.idPlatform
-        }
-    })
+    const platformExist = await platformVerify(dados)
     if(!platformExist){
         return "Id da plataforma não existente";
     }
@@ -16,14 +9,7 @@ export async function insertMovServices (dados:moviePlatform): Promise<string> {
 }
 
 export async function insertuserMovieStatsServices (userDados:userMovieStatus): Promise<string> {
-    // const userStatusExistente: QueryResult<userMovieStatusGet> = await connection.query('SELECT *
-    const userStatusExistente= await prisma.userMovieStatus.findFirst({
-     where:{
-         username: userDados.username,
-         idMovie: userDados.idMovie
-     }
-    })
-    console.log(userStatusExistente)
+    const userStatusExistente= await userExist(userDados);
      if(userStatusExistente){
          return "FILME STATUS JÁ CADASTRADO PARA ESTE USÚARIO";
      }
@@ -31,22 +17,14 @@ export async function insertuserMovieStatsServices (userDados:userMovieStatus): 
  }
 
  export async function updateMovieStatsServices (userDados:updateMovieStatus): Promise<string> {
-    const userStatusExistente = await prisma.userMovieStatus.findFirst({
-        where: {
-            id: userDados.id
-        }
-    })
+    const userStatusExistente = await userMovieExist(userDados.id)
     if(!userStatusExistente){
         return "User status não existente";
     }
     await updateMovieStats(userDados);  
 }
 export async function deleteUserStatusServices(id:number):Promise<string> {
-    const userStatusExistente = await prisma.userMovieStatus.findFirst({
-        where:{
-            id
-        }
-    })
+    const userStatusExistente = await userMovieExist(id)
     if(!userStatusExistente){
         return "User status não existente";
     }
